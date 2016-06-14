@@ -1,5 +1,4 @@
 //
-// Created by marius on 16.04.16.
 //
 
 //#include "servo_testing/parameter/parameter_bag.h"
@@ -25,8 +24,8 @@ int main (int argc, char** argv)
   ros::init (argc, argv, "servo_testing_node");
   ros::NodeHandle nh;
   
-  ros::Publisher pub = nh.advertise<trajectory_msgs::JointTrajectory>("/firefly/command_trajectory", 1);
-
+  ros::Publisher pub = nh.advertise<trajectory_msgs::JointTrajectory>("/firefly/command_trajectory", 10);
+  //ros::Publisher pub_point = nh.advertise<trajectory::JointTrajectoryPoint>("/firefly/command_trajectory",1);
   // Create messages
   trajectory_msgs::JointTrajectory trajectory;
 
@@ -40,29 +39,41 @@ int main (int argc, char** argv)
   int i = 0;
     
   trajectory.joint_names.push_back(name1);
-  trajectory.joint_names.push_back(name2);
+  //trajectory.joint_names.push_back(name2);
     
   trajectory.points.resize(1);
-  trajectory.points[0].positions.resize(20);
+  trajectory.points[0].positions.resize(1);
+  trajectory.points[0].velocities.resize(1);
+  trajectory.points[0].accelerations.resize(1);
+  trajectory.points[0].effort.resize(1);
+
 
   // While loop to test servo  
   while(value <= max) {	  
-      trajectory.points[0].positions[i] = value;	 
-      std::cout << "pos: " << trajectory.points[0].positions[i] << std::endl;
+	  trajectory.header.stamp = ros::Time::now();
+      trajectory.points[0].positions[0] = value;
+      //trajectory.points[0].velocities[0] = 0.0;
+      //trajectory.points[0].accelerations[0] = 0.0;	
+      //trajectory.points[0].effort[0] = 0.0; 
+      std::cout << "Position: "  << trajectory.points[0].positions[0] << std::endl;
 	  value += step_size;
 	  i++;
+	  
+	  pub.publish(trajectory);
+	  ros::Duration(5).sleep();
   }  
   
-  ros::Rate loop_rate(10);   // change setpoint every 1/x seconds
+  //ros::Rate loop_rate(0.01);   // change setpoint every 1/x seconds
 
-  while (ros::ok())
-  {
-    ros::spinOnce();
+  //while (ros::ok())
+  //{
+    //ros::spinOnce();
 
-    pub.publish(trajectory);
+    //pub.publish(trajectory);
 
-    loop_rate.sleep();
-  }
+	//ros::Duration(5).sleep();
+    //loop_rate.sleep();
+  //}
 
   // Initialize parameter structure
   //ParameterBag parameter;
