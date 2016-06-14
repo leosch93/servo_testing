@@ -1,6 +1,3 @@
-//
-//
-
 //#include "servo_testing/parameter/parameter_bag.h"
 //#include "servo_testing/servo_testing.h"
 
@@ -32,13 +29,20 @@ int main (int argc, char** argv)
   std::string name1 = "joint_1";
   std::string name2 = "joint_2";
 
-  float min = 9.0;
-  float max = 27.0;
-  float step_size = 1.5;
-  float value = min;
+  float minalpha = 9.0;
+  float minbeta = 9.0;
+  float maxalpha = 27.0;
+  float maxbeta = 27.0;
+
+  float step_size_alpha = 1.5;
+  float step_size_beta = 1.5;
+
+  float valuealpha = minalpha;
+  float valuebeta = minbeta;
   int i = 0;
+  int j = 0;
     
-  trajectory.joint_names.push_back(name1);
+  trajectory.joint_names.resize(1);  
   //trajectory.joint_names.push_back(name2);
     
   trajectory.points.resize(1);
@@ -47,20 +51,50 @@ int main (int argc, char** argv)
   trajectory.points[0].accelerations.resize(1);
   trajectory.points[0].effort.resize(1);
 
+// Directly command Servo
+//int num, deg;
+//std::cout << "Choose servo" << endl;
+//std::cin >> num >> endl;
+//std::cout << "Choose an angle" << endl;
+//std::cout << "Attention angles lower than -30 deg can cause a crash";
+//std::cin >> deg >> endl;
+//int commandangle;
+//commandangle = deg*45/150;
+//trajectory.points[0].positions[0] = commandangle;
 
-  // While loop to test servo  
-  while(value <= max) {	  
+
+
+  // While loop to run servo  
+  while(valuealpha <= maxalpha) {	  
+	  trajectory.joint_names[0] = name1;
 	  trajectory.header.stamp = ros::Time::now();
-      trajectory.points[0].positions[0] = value;
+      trajectory.points[0].positions[0] = valuealpha;
+      
+      pub.publish(trajectory);
+	  ros::Duration(1).sleep();
+	  std::cout << "Position command "  << trajectory.points[0].positions[0] << " Angle of attack " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
+	  valuealpha += step_size_alpha;
+	  i++;
+	  
+      while(valuebeta <= maxbeta){
+		 
+			trajectory.joint_names[0] = name2;
+			trajectory.header.stamp = ros::Time::now();
+			trajectory.points[0].positions[0] = valuebeta;
+			
+			std::cout << "Position command "  << trajectory.points[0].positions[0] << " Angle of sideslip " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
+			valuebeta += step_size_beta;
+			j++;
+			pub.publish(trajectory);
+			ros::Duration(1).sleep();
+	  }
       //trajectory.points[0].velocities[0] = 0.0;
       //trajectory.points[0].accelerations[0] = 0.0;	
       //trajectory.points[0].effort[0] = 0.0; 
-      std::cout << "Position: "  << trajectory.points[0].positions[0] << std::endl;
-	  value += step_size;
-	  i++;
-	  
-	  pub.publish(trajectory);
-	  ros::Duration(5).sleep();
+      
+	  valuebeta = minbeta;
+	  //pub.publish(trajectory);
+	  //ros::Duration(3).sleep();
   }  
   
   //ros::Rate loop_rate(0.01);   // change setpoint every 1/x seconds
