@@ -78,7 +78,7 @@ a = false;
 }
 else
 {
-	std::cout << "There is no servo number " << num <<" servo you idiot" << std::endl;
+	std::cout << "There is no servo number " << num <<" servo" << std::endl;
 	a = true;
 }
 }

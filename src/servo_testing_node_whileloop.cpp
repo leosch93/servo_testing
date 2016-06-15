@@ -34,8 +34,8 @@ int main (int argc, char** argv)
   float maxalpha = 27.0;
   float maxbeta = 27.0;
 
-  float step_size_alpha = 1.5;
-  float step_size_beta = 1.5;
+  float step_size_alpha = 0.3;
+  float step_size_beta = 0.3;
 
   float valuealpha = minalpha;
   float valuebeta = minbeta;
