@@ -51,28 +51,26 @@ int main (int argc, char** argv)
   trajectory.points[0].accelerations.resize(1);
   trajectory.points[0].effort.resize(1);
 
-
 	
-
   // While loop to run servo  
   while(valuealpha <= maxalpha) {	  
 	  trajectory.joint_names[0] = name1;
 	  trajectory.header.stamp = ros::Time::now();
       trajectory.points[0].positions[0] = valuealpha;
       
-      pub.publish(trajectory);
-	  ros::Duration(1).sleep();
-	  std::cout << "Position command "  << trajectory.points[0].positions[0] << " Angle of attack " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
+	  std::cout << "Position command "  << trajectory.points[0].positions[0] << "\t" << " Angle of attack " << "\t" << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
 	  valuealpha += step_size_alpha;
 	  i++;
+	  pub.publish(trajectory);
 	  
+	  ros::Duration(1).sleep();
       while(valuebeta <= maxbeta){
 		 
 			trajectory.joint_names[0] = name2;
 			trajectory.header.stamp = ros::Time::now();
 			trajectory.points[0].positions[0] = valuebeta;
-			
-			std::cout << "Position command "  << trajectory.points[0].positions[0] << " Angle of sideslip " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
+
+			std::cout << "Position command "  << trajectory.points[0].positions[0] << "\t" << " Angle of sideslip " << "\t" << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
 			valuebeta += step_size_beta;
 			j++;
 			pub.publish(trajectory);

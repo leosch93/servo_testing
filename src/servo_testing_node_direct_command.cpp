@@ -51,8 +51,8 @@ std::cout << std::endl << "Attention !!! Angles lower than -30 deg can cause a c
 std::cout << std::endl;
 std::cin >> deg;
 double commandangle;
-commandangle = (deg+60)*45.0/150.0;
-std::cout << commandangle << std::endl;
+commandangle = (deg+60)*45.0/150.0; 
+std::cout << "This is an angle of " << commandangle << " for the Servo" << std::endl;
 
 
 if(num==1)
@@ -60,7 +60,7 @@ if(num==1)
 trajectory.joint_names[0] = name1;
 trajectory.header.stamp = ros::Time::now();
 trajectory.points[0].positions[0] = commandangle;
-std::cout << "Position command "  << trajectory.points[0].positions[0] << " Angle of attack " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
+std::cout << "Position command "  << trajectory.points[0].positions[0] << "\t" << " Angle of attack " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
 pub.publish(trajectory);
 
 a = false;
@@ -70,7 +70,7 @@ else if(num==2)
 trajectory.joint_names[0] = name2;
 trajectory.header.stamp = ros::Time::now();
 trajectory.points[0].positions[0] = commandangle;
-std::cout << "Position command "  << trajectory.points[0].positions[0] << " Angle of sideslip " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
+std::cout << "Position command "  << trajectory.points[0].positions[0] << "\t" << " Angle of sideslip " << trajectory.points[0].positions[0]*150/45-60 << " deg" << std::endl;
 pub.publish(trajectory);
 
 
