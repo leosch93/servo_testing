@@ -1,7 +1,7 @@
 <launch>
 
-  <node pkg="servo_testing" name="servo_testing_node"
-        type="servo_testing_node" clear_params="true" output="screen" />
+  <node pkg="servo_testing" name="servo_testing_loop"
+        type="servo_testing_loop" clear_params="true" output="screen" />
 
   <!--<node name="rviz_node" pkg="rviz" type="rviz" /-->
  
